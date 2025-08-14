@@ -31,8 +31,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/finmod"
-Repository = "https://github.com/yourusername/finmod"
+Homepage = "https://github.com/bfi-finance/finmod"
+Repository = "https://github.com/bfi-finance/finmod"
 
 [tool.setuptools.packages.find]
 where = ["."]
