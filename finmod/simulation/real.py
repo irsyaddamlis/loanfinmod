@@ -1,18 +1,15 @@
-# simulation/real.py
 from __future__ import annotations
 import pandas as pd
 from ..calculator import LoanCalculator
 from ..timeline import month_between, build_month_labels, index_to_label_map
 from ..validators import ensure_real_required_columns, parse_skgolivedate, ensure_defaults
-from ..aggregation import aggregate_by_golive_period
 
 class RealSimulation:
     """
     Output:
       (loan_asset_agreement_df,
-       loan_asset_aggregate_df,
        interest_income_agreement_df,
-       interest_income_aggregate_df)
+    )
     """
     def __init__(self, calc: LoanCalculator | None = None):
         self.calc = calc or LoanCalculator()
@@ -84,9 +81,6 @@ class RealSimulation:
 
         loan_asset_agreement_df = pd.DataFrame(loan_rows)
         interest_income_agreement_df = pd.DataFrame(int_rows)
-
-        # loan_asset_aggregate_df = aggregate_by_golive_period(loan_asset_agreement_df, labels)
-        # interest_income_aggregate_df = aggregate_by_golive_period(interest_income_agreement_df, labels)
 
         return (
             loan_asset_agreement_df,

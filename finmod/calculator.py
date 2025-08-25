@@ -1,6 +1,4 @@
 class LoanCalculator:
-    """Simple annuity-based loan calculator."""
-
     @staticmethod
     def monthly_payment(amount, annual_rate_pct, months):
         if months <= 0:
@@ -10,7 +8,7 @@ class LoanCalculator:
         if r == 0:
             pmt = ((amount / months) / 100) * 100
             return pmt
-        return (amount * r / (1 - (1 + r) ** -months) / 100) * 100
+        return ((amount * r / (1 - (1 + r) ** -months)) / 100) * 100
 
     @staticmethod
     def outstanding_balance(amount, annual_rate_pct, months, paid_months):
@@ -27,3 +25,4 @@ class LoanCalculator:
     @staticmethod
     def monthly_interest(balance, annual_rate_pct):
         return balance * (annual_rate_pct / 100) / 12
+    
