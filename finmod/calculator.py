@@ -8,6 +8,11 @@ class LoanCalculator:
         if r == 0:
             pmt = ((amount / months) / 100) * 100
             return pmt
+        
+        """
+        PMT = ((NTF x Rate) / (1 - (1 + r) ** -tenure)) / 100) * 100
+        
+        """
         return ((amount * r / (1 - (1 + r) ** -months)) / 100) * 100
 
     @staticmethod
@@ -20,9 +25,13 @@ class LoanCalculator:
         if r == 0:
             return max(0, amount - (amount / months) * paid_months)
         pmt = LoanCalculator.monthly_payment(amount, annual_rate_pct, months)
+
         return max(0, amount * (1 + r) ** paid_months - pmt * ((1 + r) ** paid_months - 1) / r)
 
     @staticmethod
     def monthly_interest(balance, annual_rate_pct):
+        """
+        OSPt * Rate 
+        """
         return balance * (annual_rate_pct / 100) / 12
     
