@@ -1,3 +1,3 @@
-from .full import FullSimulation
-from .real import RealSimulation
-__all__ = ["FullSimulation", "RealSimulation"]
+from .synthetic import Synthetic
+from .real import Real
+__all__ = ["Synthetic", "Real"]
