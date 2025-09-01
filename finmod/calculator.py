@@ -1,3 +1,5 @@
+import numpy as np
+
 class LoanCalculator:
     @staticmethod
     def monthly_payment(amount, annual_rate_pct, months):
@@ -13,7 +15,7 @@ class LoanCalculator:
         PMT = ((NTF x Rate) / (1 - (1 + r) ** -tenure)) / 100) * 100
         
         """
-        return ((amount * r / (1 - (1 + r) ** -months)) / 100) * 100
+        return np.floor((amount * r / (1 - (1 + r) ** -months)) / 100) * 100
 
     @staticmethod
     def outstanding_balance(amount, annual_rate_pct, months, paid_months):
