@@ -4,16 +4,20 @@ from ..calculator import LoanCalculator
 
 class Synthetic:
     @staticmethod
-    def calculate_osp(initial_booking, growth_rate_pct, ticket_size, months, annual_rate_pct, tenure, calc=None):
+    def calculate_osp(initial_booking, growth_rate_pct, ticket_size, max_periods, annual_rate_pct, tenure, calc=None):
         """
         Calculate OSP for synthetic simulation
         Output: loan_asset_aggregate_df
-        Index waktu: 1..months (OSP_1..OSP_m)
+        Index waktu: 1..max_periods (OSP_1..OSP_m)
         """
         calculator = calc if calc else LoanCalculator()
         
+        # Use max tenure if max_periods is 0 or None
+        if not max_periods or max_periods <= 0:
+            max_periods = tenure
+        
         agreements = []
-        for start_month in range(1, months + 1):
+        for start_month in range(1, max_periods + 1):
             booking_amount = initial_booking * ((1 + growth_rate_pct / 100) ** (start_month - 1))
             if ticket_size <= 0:
                 continue
@@ -38,7 +42,7 @@ class Synthetic:
 
             asset_row = {"GoLive_Period": period, "SalesBooking": n_agree * ticket}
 
-            for abs_p in range(1, months + 1):
+            for abs_p in range(1, max_periods + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
                     # Use iterative approach instead of closed form
@@ -48,8 +52,8 @@ class Synthetic:
                     for month in range(paid):
                         if osp <= 0:
                             break
-                        principal_payment = calculator.principal_payment(pmt, osp, rate)
-                        osp = calculator.osp_current(osp, principal_payment)
+                        principal_payment = calculator._principal_payment(pmt, osp, rate)
+                        osp = calculator._osp_current(osp, principal_payment)
                     
                     os_total = osp * n_agree
                 else:
@@ -63,16 +67,20 @@ class Synthetic:
         return loan_asset_aggregate_df
 
     @staticmethod
-    def calculate_interest(initial_booking, growth_rate_pct, ticket_size, months, annual_rate_pct, tenure, calc=None):
+    def calculate_income(initial_booking, growth_rate_pct, ticket_size, max_periods, annual_rate_pct, tenure, calc=None):
         """
         Calculate Interest for synthetic simulation
         Output: interest_income_aggregate_df  
-        Index waktu: 1..months (Interest_1..Interest_m)
+        Index waktu: 1..max_periods (Interest_1..Interest_m)
         """
         calculator = calc if calc else LoanCalculator()
         
+        # Use max tenure if max_periods is 0 or None
+        if not max_periods or max_periods <= 0:
+            max_periods = tenure
+        
         agreements = []
-        for start_month in range(1, months + 1):
+        for start_month in range(1, max_periods + 1):
             booking_amount = initial_booking * ((1 + growth_rate_pct / 100) ** (start_month - 1))
             if ticket_size <= 0:
                 continue
@@ -97,7 +105,7 @@ class Synthetic:
 
             interest_row = {"GoLive_Period": period}
 
-            for abs_p in range(1, months + 1):
+            for abs_p in range(1, max_periods + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
                     # Use iterative approach instead of closed form
@@ -108,12 +116,12 @@ class Synthetic:
                     for month in range(paid):
                         if osp <= 0:
                             break
-                        principal_payment = calculator.principal_payment(pmt, osp, rate)
-                        osp = calculator.osp_current(osp, principal_payment)
+                        principal_payment = calculator._principal_payment(pmt, osp, rate)
+                        osp = calculator._osp_current(osp, principal_payment)
                     
                     # Interest income = installment - principal payment for current period
-                    current_principal = calculator.principal_payment(pmt, osp, rate) if osp > 0 else 0
-                    interest_per_agreement = calculator.interest_income(installment, current_principal)
+                    current_principal = calculator._principal_payment(pmt, osp, rate) if osp > 0 else 0
+                    interest_per_agreement = calculator._interest_income(installment, current_principal)
                     interest_total = interest_per_agreement * n_agree
                 else:
                     interest_total = 0.0

@@ -6,19 +6,19 @@ from typing import Optional
 
 class Real:
     @staticmethod
-    def calculate_osp(df, agreement_col, ntf_col, rate_col, tenor_col, golive_col, max_periods: Optional[int] = None, calc=None):
+    def calculate_osp(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
         if not max_periods:
-            max_periods = df[tenor_col].max()
+            max_periods = df[tenure_col].max()
 
         start_date = data[golive_col].min()
         start_date = pd.to_datetime(start_date, format="%Y%m%d")
         
-        if not all([ntf_col, rate_col, tenor_col]):
+        if not all([ntf_col, rate_col, tenure_col]):
             raise ValueError("Missing required mapping keys")
         
-        missing = [col for col in [ntf_col, rate_col, tenor_col] if col not in data.columns]
+        missing = [col for col in [ntf_col, rate_col, tenure_col] if col not in data.columns]
         if missing:
             raise ValueError(f"Missing columns: {missing}")
         
@@ -27,7 +27,7 @@ class Real:
         
         data[ntf_col] = data[ntf_col].fillna(0).astype(float)
         data[rate_col] = data[rate_col].fillna(12).astype(float)  
-        data[tenor_col] = data[tenor_col].fillna(12).astype(int)
+        data[tenure_col] = data[tenure_col].fillna(12).astype(int)
         
         if golive_col and golive_col in data.columns:
             data[golive_col] = pd.to_datetime(
@@ -45,7 +45,7 @@ class Real:
         for _, row in data.iterrows():
             amount = row[ntf_col]
             rate = row[rate_col]
-            tenure = row[tenor_col]
+            tenure = row[tenure_col]
             agreement = row[agreement_col]
             
             if golive_col and golive_col in data.columns:
@@ -80,8 +80,8 @@ class Real:
                     for month in range(actual_period):
                         if osp <= 0:
                             break
-                        principal_payment = calculator.principal_payment(pmt, osp, rate)
-                        osp = calculator.osp_current(osp, principal_payment)
+                        principal_payment = calculator._principal_payment(pmt, osp, rate)
+                        osp = calculator._osp_current(osp, principal_payment)
                 else:
                     osp = 0.0
                 
@@ -92,20 +92,20 @@ class Real:
         return pd.DataFrame(rows)
 
     @staticmethod
-    def calculate_interest(df, agreement_col, ntf_col, rate_col, tenor_col, golive_col, max_periods: Optional[int] = None, calc=None):
+    def calculate_income(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
         
         data = df.copy()
         if not max_periods:
-            max_periods = df[tenor_col].max()
+            max_periods = df[tenure_col].max()
 
         start_date = data[golive_col].min()
         start_date = pd.to_datetime(start_date, format="%Y%m%d")
-        if not all([ntf_col, rate_col, tenor_col]):
+        if not all([ntf_col, rate_col, tenure_col]):
             raise ValueError("Missing required mapping keys")
         
-        missing = [col for col in [ntf_col, rate_col, tenor_col] if col not in data.columns]
+        missing = [col for col in [ntf_col, rate_col, tenure_col] if col not in data.columns]
         if missing:
             raise ValueError(f"Missing columns: {missing}")
         
@@ -114,7 +114,7 @@ class Real:
         
         data[ntf_col] = data[ntf_col].fillna(0).astype(float)
         data[rate_col] = data[rate_col].fillna(12).astype(float)  
-        data[tenor_col] = data[tenor_col].fillna(12).astype(int)
+        data[tenure_col] = data[tenure_col].fillna(12).astype(int)
         
         if golive_col and golive_col in data.columns:
             data[golive_col] = pd.to_datetime(
@@ -132,7 +132,7 @@ class Real:
         for _, row in data.iterrows():
             amount = row[ntf_col]
             rate = row[rate_col]
-            tenure = row[tenor_col]
+            tenure = row[tenure_col]
             agreement = row[agreement_col]
             
             if golive_col and golive_col in data.columns:
@@ -168,12 +168,12 @@ class Real:
                     for month in range(actual_period):
                         if osp <= 0:
                             break
-                        principal_payment = calculator.principal_payment(pmt, osp, rate)
-                        osp = calculator.osp_current(osp, principal_payment)
+                        principal_payment = calculator._principal_payment(pmt, osp, rate)
+                        osp = calculator._osp_current(osp, principal_payment)
                     
                     # Interest income = installment - principal payment for current period
-                    current_principal = calculator.principal_payment(pmt, osp, rate) if osp > 0 else 0
-                    interest = calculator.interest_income(installment, current_principal)
+                    current_principal = calculator._principal_payment(pmt, osp, rate) if osp > 0 else 0
+                    interest = calculator._interest_income(installment, current_principal)
                 else:
                     interest = 0.0
                 
