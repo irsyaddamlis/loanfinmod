@@ -41,8 +41,17 @@ class Synthetic:
             for abs_p in range(1, months + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
-                    os_one = calculator.outstanding_balance(ticket, rate, ten, paid)
-                    os_total = os_one * n_agree
+                    # Use iterative approach instead of closed form
+                    osp = ticket
+                    pmt = calculator.pmt(ticket, rate, ten)
+                    
+                    for month in range(paid):
+                        if osp <= 0:
+                            break
+                        principal_payment = calculator.principal_payment(pmt, osp, rate)
+                        osp = calculator.osp_current(osp, principal_payment)
+                    
+                    os_total = osp * n_agree
                 else:
                     os_total = 0.0
 
@@ -91,8 +100,21 @@ class Synthetic:
             for abs_p in range(1, months + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
-                    os_one = calculator.outstanding_balance(ticket, rate, ten, paid)
-                    interest_total = calculator.monthly_interest(os_one, rate) * n_agree
+                    # Use iterative approach instead of closed form
+                    osp = ticket
+                    pmt = calculator.pmt(ticket, rate, ten)
+                    installment = calculator.installment_amount(ticket, rate, ten)
+                    
+                    for month in range(paid):
+                        if osp <= 0:
+                            break
+                        principal_payment = calculator.principal_payment(pmt, osp, rate)
+                        osp = calculator.osp_current(osp, principal_payment)
+                    
+                    # Interest income = installment - principal payment for current period
+                    current_principal = calculator.principal_payment(pmt, osp, rate) if osp > 0 else 0
+                    interest_per_agreement = calculator.interest_income(installment, current_principal)
+                    interest_total = interest_per_agreement * n_agree
                 else:
                     interest_total = 0.0
 

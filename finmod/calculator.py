@@ -2,7 +2,16 @@ import numpy as np
 
 class LoanCalculator:
     @staticmethod
-    def monthly_payment(amount, annual_rate_pct, months):
+    def pmt(amount, annual_rate_pct, months) -> float:
+        if months <= 0:
+            return 0.0
+        r = (annual_rate_pct / 100) / 12
+        if r == 0:
+            return amount / months
+        return (amount * r / (1 - (1 + r) ** -months))
+
+    @staticmethod
+    def installment_amount(amount, annual_rate_pct, months) -> float:
         if months <= 0:
             return 0.0
         r = (annual_rate_pct / 100) / 12
@@ -11,24 +20,21 @@ class LoanCalculator:
             pmt = ((amount / months) / 100) * 100
             return pmt
         
-        """
-        PMT = ((NTF x Rate) / (1 - (1 + r) ** -tenure)) / 100) * 100
-        
-        """
-        return np.floor((amount * r / (1 - (1 + r) ** -months)) / 100) * 100
+        pmt = (amount * r / (1 - (1 + r) ** -months)) 
+        return np.round(pmt/100, 0) * 100
 
     @staticmethod
-    def outstanding_balance(amount, annual_rate_pct, months, paid_months):
-        if paid_months >= months:
-            return 0.0
-        if paid_months <= 0:
-            return amount
-        r = (annual_rate_pct / 100) / 12
-        if r == 0:
-            return max(0, amount - (amount / months) * paid_months)
-        pmt = LoanCalculator.monthly_payment(amount, annual_rate_pct, months)
+    def principal_payment(pmt, osp_last_month, annual_rate_pct):
+        monthly_rate = (annual_rate_pct / 100) / 12
+        return pmt - (osp_last_month * monthly_rate)
 
-        return max(0, amount * (1 + r) ** paid_months - pmt * ((1 + r) ** paid_months - 1) / r)
+    @staticmethod
+    def osp_current(osp_last_month, principal_payment):
+        return osp_last_month - principal_payment
+
+    @staticmethod
+    def interest_income(installment, principal_payment):
+        return installment - principal_payment
 
     @staticmethod
     def monthly_interest(balance, annual_rate_pct):
@@ -36,4 +42,3 @@ class LoanCalculator:
         OSPt * Rate 
         """
         return balance * (annual_rate_pct / 100) / 12
-    
