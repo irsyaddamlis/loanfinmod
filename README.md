@@ -1,80 +1,154 @@
-# Financial Model
+# Financial Model (`finmod`)
 
-## Synthetic
-```python
-from finmod.simulation import Synthetic as syn
+A Python library for financial calculations: loan payment schedules, outstanding principal (OSP) simulations, and interest income projections. Supports both **real contract data** and **synthetic initiation scenarios**.
 
-osp_synthetic = syn.calculate_osp(
-    initial_booking=10000000000,
-    growth_rate_pct=10,
-    ticket_size=10000000,
-    annual_rate_pct=24,
-    tenure=18,
-    months=19
-)
+## Installation
 
-interest_synthetic = syn.calculate_interest(
-    initial_booking=10000000000,
-    growth_rate_pct=10,
-    ticket_size=10000000,
-    annual_rate_pct=24,
-    tenure=18,
-    months=19
-)
-
-print("Outstanding Principal")
-display(osp_synthetic.head(5))
-print("Interest Income")
-display(interest_synthetic.head(5))
-
+```bash
+pip uninstall -y finmod  # if already installed
+pip install git+https://github.com/bfi-finance/finmod.git
 ```
 
-## Real Data
+Make sure the version is **1.0.1**.
+
 ```python
+import finmod as fin
+```
 
-import dataport as dp
+---
 
-fact_contract_sample = dp.sqlserver_query(
-    query="""
-        SELECT TOP (10) * FROM [DWBIBFI2_DWH].[dbo].[Fact_Contract]
-        WHERE [SK_GoLive_Date] > 20250100 AND [SK_GoLive_Date] < 20250200
-        UNION
-        SELECT TOP (10) * FROM [DWBIBFI2_DWH].[dbo].[Fact_Contract]
-        WHERE [SK_GoLive_Date] > 20250200 AND [SK_GoLive_Date] < 20250300
-        UNION
-        SELECT TOP (10) * FROM [DWBIBFI2_DWH].[dbo].[Fact_Contract]
-        WHERE [SK_GoLive_Date] > 20250300 AND [SK_GoLive_Date] < 20250400
-    """,
-    server="dwhdb",
-    database="DWBIBFI2_DWH",
-    windows_auth=True
+## Function Parameters
+
+### Payment Functions
+
+* `df`: pandas DataFrame containing the data
+* `ntf_col`: column name for loan amount
+* `rate_col`: column name for annual interest rate (%)
+* `tenure_col`: column name for loan tenure (months)
+
+### Real Data Functions
+
+* `df`: pandas DataFrame with contract data
+* `agreement_col`: column name for agreement/contract ID
+* `ntf_col`: column name for loan amount
+* `rate_col`: column name for annual interest rate (%)
+* `tenure_col`: column name for loan tenure (months)
+* `golive_col`: column name for go-live date (YYYYMMDD format)
+* `max_periods`: maximum projection periods (optional, defaults to max tenure)
+
+### Initiation Functions
+
+* `initial_booking`: initial booking amount for first period
+* `growth_rate_pct`: monthly growth rate percentage
+* `ticket_size`: average loan amount per agreement
+* `annual_rate_pct`: annual interest rate percentage
+* `tenure`: loan tenure in months
+* `max_periods`: number of projection periods (if 0/None → uses tenure)
+
+---
+
+## Public Functions
+
+### 1. Payment Calculations
+
+#### a. Calculate PMT
+
+```python
+# Add a new column to DataFrame
+fact_contract_sample['pmt'] = fin.calculate_pmt(
+    df=fact_contract_sample,
+    ntf_col="Booking_NTF_Amount",
+    rate_col="Effective_Rate",
+    tenure_col="Tenor"
 )
 
-from finmod.simulation import Real as real
+# Return values only
+pmt_values = fin.calculate_pmt(
+    df=fact_contract_sample,
+    ntf_col="Booking_NTF_Amount",
+    rate_col="Effective_Rate",
+    tenure_col="Tenor"
+)
+```
 
-real_osp = real.calculate_osp(
+#### b. Calculate Installment
+
+```python
+# Add a new column to DataFrame
+fact_contract_sample['installment'] = fin.calculate_installment(
+    df=fact_contract_sample,
+    ntf_col="Booking_NTF_Amount",
+    rate_col="Effective_Rate",
+    tenure_col="Tenor"
+)
+
+# Return values only
+installment_values = fin.calculate_installment(
+    df=fact_contract_sample,
+    ntf_col="Booking_NTF_Amount",
+    rate_col="Effective_Rate",
+    tenure_col="Tenor"
+)
+```
+
+---
+
+### 2. Simulation – Real Data
+
+#### a. Calculate Outstanding Principal (OSP)
+
+```python
+osp = fin.real.calculate_osp(
     df=fact_contract_sample,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
+    tenure_col="Tenor",
+    rate_col="Effective_Rate",
     golive_col="SK_GoLive_Date",
-    tenor_col="Tenor",
-    rate_col='Effective_Rate',
-    # max_periods=12 #Jika tidak diisi, akan automatis mengambil max tenure
+    max_periods=12  # Optional: if not provided, uses max tenure
 )
+```
 
-real_interest = real.calculate_interest(
+#### b. Calculate Interest Income
+
+```python
+income = fin.real.calculate_income(
     df=fact_contract_sample,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
+    tenure_col="Tenor",
+    rate_col="Effective_Rate",
     golive_col="SK_GoLive_Date",
-    tenor_col="Tenor",
-    rate_col='Effective_Rate',
-    # max_periods=12 #Jika tidak diisi, akan automatis mengambil max tenure
+    max_periods=12  # Optional: if not provided, uses max tenure
 )
+```
 
-print("Outstanding Principal")
-display(real_osp.head(5))
-print("Interest Income")
-display(real_interest.head(5))
+---
 
+### 3. Simulation – Initiation
+
+#### a. Calculate OSP
+
+```python
+init_osp = fin.initiation.calculate_osp(
+    initial_booking=5000000000,
+    growth_rate_pct=10,
+    ticket_size=100000000,
+    annual_rate_pct=24,
+    tenure=18,
+    # max_periods=12  # Optional: if not provided, uses tenure
+)
+```
+
+#### b. Calculate Interest Income
+
+```python
+init_income = fin.initiation.calculate_income(
+    initial_booking=5000000000,
+    growth_rate_pct=10,
+    ticket_size=100000000,
+    annual_rate_pct=24,
+    tenure=18,
+    # max_periods=12  # Optional: if not provided, uses tenure
+)
 ```
