@@ -14,10 +14,8 @@ def calculate_installment(df, ntf_col, rate_col, tenure_col):
         return LoanCalculator.installment_amount(row[ntf_col], row[rate_col], row[tenure_col])
     return df.apply(calc_installment, axis=1)
 
-# Create aliases for synthetic to match your desired interface
 initiation = synthetic
 
-# Explicitly define what should be available for autocomplete
 __all__ = [
     "calculate_pmt", 
     "calculate_installment", 
