@@ -1,10 +1,11 @@
 from __future__ import annotations
 import pandas as pd
 from ..calculator import LoanCalculator
+from typing import Optional
 
 class Synthetic:
     @staticmethod
-    def calculate_osp(initial_booking, growth_rate_pct, ticket_size, max_periods, annual_rate_pct, tenure, calc=None):
+    def calculate_osp(initial_booking: float, growth_rate_pct: float, ticket_size: float, annual_rate_pct: float, tenure: int, max_periods: Optional[int]=None, calc=None):
         """
         Calculate OSP for synthetic simulation
         Output: loan_asset_aggregate_df
@@ -67,7 +68,7 @@ class Synthetic:
         return loan_asset_aggregate_df
 
     @staticmethod
-    def calculate_income(initial_booking, growth_rate_pct, ticket_size, max_periods, annual_rate_pct, tenure, calc=None):
+    def calculate_income(initial_booking: float, growth_rate_pct: float, ticket_size: float,  annual_rate_pct: float, tenure: int, max_periods: Optional[int]=None, calc=None):
         """
         Calculate Interest for synthetic simulation
         Output: interest_income_aggregate_df  
