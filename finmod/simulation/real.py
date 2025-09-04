@@ -74,15 +74,18 @@ class Real:
                 actual_period = months_elapsed + period
                 
                 if actual_period < tenure:
-                    # Use iterative approach instead of closed form
-                    osp = amount
-                    pmt = calculator.pmt(amount, rate, tenure)
-                    
-                    for month in range(actual_period):
-                        if osp <= 0:
-                            break
-                        principal_payment = calculator._principal_payment(pmt, osp, rate)
-                        osp = calculator._osp_current(osp, principal_payment)
+                    if actual_period < 0:  # Periode sebelum go-live
+                        osp = 0.0
+                    else:
+                        # Use iterative approach instead of closed form
+                        osp = amount
+                        pmt = calculator.pmt(amount, rate, tenure)
+                        
+                        for month in range(actual_period):
+                            if osp <= 0:
+                                break
+                            principal_payment = calculator._principal_payment(pmt, osp, rate)
+                            osp = calculator._osp_current(osp, principal_payment)
                 else:
                     osp = 0.0
                 
@@ -164,20 +167,23 @@ class Real:
                 actual_period = months_elapsed + period
                 
                 if actual_period < tenure:
-                    # Use iterative approach instead of closed form
-                    osp = amount
-                    pmt = calculator.pmt(amount, rate, tenure)
-                    installment = calculator.installment_amount(amount, rate, tenure)
-                    
-                    for month in range(actual_period):
-                        if osp <= 0:
-                            break
-                        principal_payment = calculator._principal_payment(pmt, osp, rate)
-                        osp = calculator._osp_current(osp, principal_payment)
-                    
-                    # Interest income = installment - principal payment for current period
-                    current_principal = calculator._principal_payment(pmt, osp, rate) if osp > 0 else 0
-                    interest = calculator._interest_income(installment, current_principal)
+                    if actual_period < 0:  # Periode sebelum go-live  
+                        interest = 0.0
+                    else:
+                        # Use iterative approach instead of closed form
+                        osp = amount
+                        pmt = calculator.pmt(amount, rate, tenure)
+                        installment = calculator.installment_amount(amount, rate, tenure)
+                        
+                        for month in range(actual_period):
+                            if osp <= 0:
+                                break
+                            principal_payment = calculator._principal_payment(pmt, osp, rate)
+                            osp = calculator._osp_current(osp, principal_payment)
+                        
+                        # Interest income = installment - principal payment for current period
+                        current_principal = calculator._principal_payment(pmt, osp, rate) if osp > 0 else 0
+                        interest = calculator._interest_income(installment, current_principal)
                 else:
                     interest = 0.0
                 
