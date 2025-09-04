@@ -127,7 +127,7 @@ class Synthetic:
                 else:
                     interest_total = 0.0
 
-                interest_row[f"Interest_{abs_p}"] = interest_total
+                interest_row[f"Income_{abs_p}"] = interest_total
 
             rows_interest.append(interest_row)
 

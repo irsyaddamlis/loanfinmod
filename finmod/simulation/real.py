@@ -74,10 +74,9 @@ class Real:
                 actual_period = months_elapsed + period
                 
                 if actual_period < tenure:
-                    if actual_period < 0:  # Periode sebelum go-live
+                    if actual_period < 0:  # Sebelum go-live
                         osp = 0.0
                     else:
-                        # Use iterative approach instead of closed form
                         osp = amount
                         pmt = calculator.pmt(amount, rate, tenure)
                         
@@ -167,7 +166,7 @@ class Real:
                 actual_period = months_elapsed + period
                 
                 if actual_period < tenure:
-                    if actual_period < 0:  # Periode sebelum go-live  
+                    if actual_period < 0:  # Sebelum go-live
                         interest = 0.0
                     else:
                         # Use iterative approach instead of closed form
@@ -187,7 +186,7 @@ class Real:
                 else:
                     interest = 0.0
                 
-                interest_row[f'Interest_{label}'] = interest
+                interest_row[f'Income_{label}'] = interest
             
             rows.append(interest_row)
         tmp = pd.DataFrame(rows)
