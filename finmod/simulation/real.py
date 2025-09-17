@@ -1,5 +1,4 @@
 from __future__ import annotations
-from readline import redisplay
 import pandas as pd
 from ..calculator import LoanCalculator
 from ..timeline import build_month_labels, index_to_label_map
@@ -97,36 +96,36 @@ class Real:
         tmp = pd.DataFrame(rows)
         result_df = tmp
         
-        # Display ENR automatically as DataFrame
-        from ..calculator import LoanCalculator as LC
-        enr_values = LC.calculate_enr(result_df)
+        # # Display ENR automatically as DataFrame
+        # from ..calculator import LoanCalculator as LC
+        # enr_values = LC.calculate_enr(result_df)
         
-        # Create ENR and ANR DataFrame
-        enr_data = {}
-        anr_data = {}
+        # # Create ENR and ANR DataFrame
+        # enr_data = {}
+        # anr_data = {}
         
         # Calculate cumulative sums for ANR calculation
-        cumulative_sum = 0
+        # cumulative_sum = 0
         
-        for i, (col_name, value) in enumerate(enr_values.items(), 1):
-            enr_col_name = col_name.replace('OSP_', '')
+        # for i, (col_name, value) in enumerate(enr_values.items(), 1):
+        #     enr_col_name = col_name.replace('OSP_', '')
             
-            # ENR value
-            enr_data[enr_col_name] = value
+        #     # ENR value
+        #     enr_data[enr_col_name] = value
             
-            # ANR value (cumulative average)
-            cumulative_sum += value
-            anr_value = cumulative_sum / i
-            anr_data[enr_col_name] = anr_value
+        #     # ANR value (cumulative average)
+        #     cumulative_sum += value
+        #     anr_value = cumulative_sum / i
+        #     anr_data[enr_col_name] = anr_value
         
-        # Create DataFrame with ENR and ANR rows
-        enr_anr_df = pd.DataFrame({
-            'ENR': enr_data,
-            'ANR': anr_data
-        }).T
+        # # Create DataFrame with ENR and ANR rows
+        # enr_anr_df = pd.DataFrame({
+        #     'ENR': enr_data,
+        #     'ANR': anr_data
+        # }).T
         
-        print("ENR and ANR DataFrame:")
-        display(enr_anr_df)
+        # print("ENR and ANR DataFrame:")
+        # display(enr_anr_df)
         
         return result_df
 
