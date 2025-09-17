@@ -55,7 +55,7 @@ Your DataFrame should contain the following columns:
 | Column Name | Data Type | Description | Example Values |
 |-------------|-----------|-------------|----------------|
 | Agreement Column | string/numeric | Unique contract/agreement ID | 'AGR001', 1234566789 |
-| NTF Amount Column | numeric | Net financed amount (loan principal) | 10000000, 15000000 |
+| NTF Amount Column | numeric | NTF amount (loan principal) | 10000000, 15000000 |
 | Rate Column | numeric | Annual effective rate (percentage) | 36.0, 42.5 |
 | Tenure Column | integer | Loan tenure in months | 6, 12, 18, 24 |
 | GoLive Date Column | string/numeric | Contract start date (YYYYMMDD format) | 20250102, 20250115 |
