@@ -23,7 +23,7 @@ import finmod as fin
 
 * `df`: pandas DataFrame containing the data
 * `ntf_col`: column name for loan amount
-* `rate_col`: column name for annual interest rate (%)
+* `rate_col`: column name for annual effective rate (%)
 * `tenure_col`: column name for loan tenure (months)
 
 ### Real Data Functions
@@ -31,7 +31,7 @@ import finmod as fin
 * `df`: pandas DataFrame with contract data
 * `agreement_col`: column name for agreement/contract ID
 * `ntf_col`: column name for loan amount
-* `rate_col`: column name for annual interest rate (%)
+* `rate_col`: column name for annual effective rate (%)
 * `tenure_col`: column name for loan tenure (months)
 * `golive_col`: column name for go-live date (YYYYMMDD format)
 * `max_periods`: maximum projection periods (optional, defaults to max tenure)
@@ -41,9 +41,44 @@ import finmod as fin
 * `initial_booking`: initial booking amount for first period
 * `growth_rate_pct`: monthly growth rate percentage
 * `ticket_size`: average loan amount per agreement
-* `annual_rate_pct`: annual interest rate percentage
+* `annual_rate_pct`: annual effective rate percentage
 * `tenure`: loan tenure in months
 * `max_periods`: number of projection periods (if 0/None → uses tenure)
+
+---
+
+## Sample Data Format
+
+Your DataFrame should contain the following columns:  
+*Column names are dynamic and follow the column names in your dataframe.*
+
+| Column Name | Data Type | Description | Example Values |
+|-------------|-----------|-------------|----------------|
+| Agreement Column | string/numeric | Unique contract/agreement ID | 'AGR001', 1234566789 |
+| NTF Amount Column | numeric | Net financed amount (loan principal) | 10000000, 15000000 |
+| Rate Column | numeric | Annual effective rate (percentage) | 36.0, 42.5 |
+| Tenure Column | integer | Loan tenure in months | 6, 12, 18, 24 |
+| GoLive Date Column | string/numeric | Contract start date (YYYYMMDD format) | 20250102, 20250115 |
+
+### Sample Data Example:
+
+```python
+import pandas as pd
+
+sample_data = pd.DataFrame({
+    'AgreementNo': ['AGR001', 'AGR002', 'AGR003', 'AGR004', 'AGR005'],
+    'Booking_NTF_Amount': [10000000, 15000000, 8000000, 12000000, 5000000],
+    'Effective_Rate': [36.0, 42.5, 38.2, 40.1, 45.8],
+    'Tenor': [6, 12, 9, 18, 24],
+    'SK_GoLive_Date': [20250102, 20250115, 20241201, 20250101, 20250110]
+})
+```
+
+**Important Notes:**
+- Column names can be customized - match them with function parameters
+- GoLive date must be in YYYYMMDD format
+- Effective rate should be in percentage (36.0 = 36% per year)
+- All numeric values must be valid (no null values for required columns)
 
 ---
 
