@@ -63,8 +63,8 @@ class Real:
                 continue
             
             osp_row = {
-                agreement_col: agreement,
                 golive_col: golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
+                agreement_col: agreement,
                 ntf_col: amount,
                 tenure_col: tenure,
                 rate_col: rate
@@ -186,8 +186,8 @@ class Real:
                 continue
             
             interest_row = {
-                agreement_col: agreement,
                 golive_col: golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
+                agreement_col: agreement,
                 ntf_col: amount,
                 tenure_col: tenure,
                 rate_col: rate
