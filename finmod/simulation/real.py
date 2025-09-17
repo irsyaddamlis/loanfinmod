@@ -1,8 +1,10 @@
 from __future__ import annotations
+from readline import redisplay
 import pandas as pd
 from ..calculator import LoanCalculator
 from ..timeline import build_month_labels, index_to_label_map
 from typing import Optional
+from IPython.display import display
 
 class Real:
     @staticmethod
@@ -62,11 +64,11 @@ class Real:
                 continue
             
             osp_row = {
-                'AgreementNo': agreement,
-                'SK_GoLive_Date': golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
-                'Booking_NTF_Amount': amount,
-                'Tenure': tenure,
-                'EffectiveRate': rate
+                agreement_col: agreement,
+                golive_col: golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
+                ntf_col: amount,
+                tenure_col: tenure,
+                rate_col: rate
             }
             
             for period in range(max_periods):
@@ -93,9 +95,40 @@ class Real:
             rows.append(osp_row)
 
         tmp = pd.DataFrame(rows)
-        cols = list(tmp.columns)
-        new_order = [golive_col] + [c for c in cols if c != golive_col]
-        return tmp[new_order]
+        result_df = tmp
+        
+        # Display ENR automatically as DataFrame
+        from ..calculator import LoanCalculator as LC
+        enr_values = LC.calculate_enr(result_df)
+        
+        # Create ENR and ANR DataFrame
+        enr_data = {}
+        anr_data = {}
+        
+        # Calculate cumulative sums for ANR calculation
+        cumulative_sum = 0
+        
+        for i, (col_name, value) in enumerate(enr_values.items(), 1):
+            enr_col_name = col_name.replace('OSP_', '')
+            
+            # ENR value
+            enr_data[enr_col_name] = value
+            
+            # ANR value (cumulative average)
+            cumulative_sum += value
+            anr_value = cumulative_sum / i
+            anr_data[enr_col_name] = anr_value
+        
+        # Create DataFrame with ENR and ANR rows
+        enr_anr_df = pd.DataFrame({
+            'ENR': enr_data,
+            'ANR': anr_data
+        }).T
+        
+        print("ENR and ANR DataFrame:")
+        display(enr_anr_df)
+        
+        return result_df
 
     @staticmethod
     def calculate_income(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
@@ -154,11 +187,11 @@ class Real:
                 continue
             
             interest_row = {
-                'SK_GoLive_Date': golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
-                'AgreementNo': agreement,
-                'Booking_NTF_Amount': amount,
-                'Tenure': tenure, 
-                'EffectiveRate': rate
+                agreement_col: agreement,
+                golive_col: golive_date.strftime('%Y%m%d') if pd.notna(golive_date) else start_dt.strftime('%Y%m%d'),
+                ntf_col: amount,
+                tenure_col: tenure,
+                rate_col: rate
             }
             
             for period in range(max_periods):
@@ -190,7 +223,5 @@ class Real:
             
             rows.append(interest_row)
         tmp = pd.DataFrame(rows)
-        cols = list(tmp.columns)
-        new_order = [golive_col] + [c for c in cols if c != golive_col]
-        
-        return tmp[new_order]
+
+        return tmp
