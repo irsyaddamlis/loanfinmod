@@ -11,7 +11,15 @@ class Real:
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
         if not max_periods:
-            max_periods = df[tenure_col].max()
+            min_golive = pd.to_datetime(data[golive_col].min(), format="%Y%m%d")
+            golive_dates = pd.to_datetime(data[golive_col], format="%Y%m%d")
+
+            months_from_start = ((golive_dates.dt.year - min_golive.year) * 12 +
+                                (golive_dates.dt.month - min_golive.month))
+
+            contract_end_periods = months_from_start + data[tenure_col]
+
+            max_periods = contract_end_periods.max()
 
         start_date = data[golive_col].min()
         start_date = pd.to_datetime(start_date, format="%Y%m%d")
@@ -35,9 +43,7 @@ class Real:
             data[golive_col] = pd.to_datetime(
                 data[golive_col].astype(str), 
                 format="%Y%m%d", 
-                # errors='coerce'
             )
-            # data[golive_col] = data[golive_col].fillna(pd.Timestamp(start_date))
         
         start_dt = pd.Timestamp(start_date)
         labels = build_month_labels(start_dt, max_periods)
@@ -96,47 +102,28 @@ class Real:
         tmp = pd.DataFrame(rows)
         result_df = tmp
         
-        # # Display ENR automatically as DataFrame
-        # from ..calculator import LoanCalculator as LC
-        # enr_values = LC.calculate_enr(result_df)
-        
-        # # Create ENR and ANR DataFrame
-        # enr_data = {}
-        # anr_data = {}
-        
-        # Calculate cumulative sums for ANR calculation
-        # cumulative_sum = 0
-        
-        # for i, (col_name, value) in enumerate(enr_values.items(), 1):
-        #     enr_col_name = col_name.replace('OSP_', '')
-            
-        #     # ENR value
-        #     enr_data[enr_col_name] = value
-            
-        #     # ANR value (cumulative average)
-        #     cumulative_sum += value
-        #     anr_value = cumulative_sum / i
-        #     anr_data[enr_col_name] = anr_value
-        
-        # # Create DataFrame with ENR and ANR rows
-        # enr_anr_df = pd.DataFrame({
-        #     'ENR': enr_data,
-        #     'ANR': anr_data
-        # }).T
-        
-        # print("ENR and ANR DataFrame:")
-        # display(enr_anr_df)
-        
         return result_df
 
     @staticmethod
     def calculate_income(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
-        
+
         data = df.copy()
         if not max_periods:
-            max_periods = df[tenure_col].max()
+            # Calculate optimal max_periods based on actual contract end periods
+            min_golive = pd.to_datetime(data[golive_col].min(), format="%Y%m%d")
+            golive_dates = pd.to_datetime(data[golive_col], format="%Y%m%d")
+
+            # Calculate months from min_golive to each contract's golive date
+            months_from_start = ((golive_dates.dt.year - min_golive.year) * 12 +
+                                (golive_dates.dt.month - min_golive.month))
+
+            # Add each contract's tenure to get their end period
+            contract_end_periods = months_from_start + data[tenure_col]
+
+            # Take the maximum as our required projection length
+            max_periods = contract_end_periods.max()
 
         start_date = data[golive_col].min()
         start_date = pd.to_datetime(start_date, format="%Y%m%d")
@@ -158,9 +145,7 @@ class Real:
             data[golive_col] = pd.to_datetime(
                 data[golive_col].astype(str), 
                 format="%Y%m%d", 
-                # errors='coerce'
             )
-            # data[golive_col] = data[golive_col].fillna(pd.Timestamp(start_date))
         
         start_dt = pd.Timestamp(start_date)
         labels = build_month_labels(start_dt, max_periods)
@@ -178,10 +163,8 @@ class Real:
             else:
                 golive_date = start_dt
                 
-            # Calculate months elapsed from go-live to start date
             months_elapsed = (start_dt.year - golive_date.year) * 12 + (start_dt.month - golive_date.month)
             
-            # Skip agreement if already expired
             if months_elapsed >= tenure:
                 continue
             

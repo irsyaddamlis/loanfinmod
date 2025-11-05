@@ -12,13 +12,19 @@ class Synthetic:
         Index waktu: 1..max_periods (OSP_1..OSP_m)
         """
         calculator = calc if calc else LoanCalculator()
-        
-        # Use max tenure if max_periods is 0 or None
+
+        # Determine booking periods (how long we keep booking new contracts)
         if not max_periods or max_periods <= 0:
-            max_periods = tenure
-        
+            booking_periods = tenure
+        else:
+            booking_periods = max_periods
+
+        # Total projection periods = last booking period + tenure - 1
+        # Because a contract booked at period N runs until period N + tenure - 1
+        projection_periods = booking_periods + tenure - 1
+
         agreements = []
-        for start_month in range(1, max_periods + 1):
+        for start_month in range(1, booking_periods + 1):
             booking_amount = initial_booking * ((1 + growth_rate_pct / 100) ** (start_month - 1))
             if ticket_size <= 0:
                 continue
@@ -43,7 +49,7 @@ class Synthetic:
 
             asset_row = {"GoLive_Period": period, "SalesBooking": n_agree * ticket}
 
-            for abs_p in range(1, max_periods + 1):
+            for abs_p in range(1, projection_periods + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
                     # Use iterative approach instead of closed form
@@ -71,17 +77,23 @@ class Synthetic:
     def calculate_income(initial_booking: float, growth_rate_pct: float, ticket_size: float,  annual_rate_pct: float, tenure: int, max_periods: Optional[int]=None, calc=None):
         """
         Calculate Interest for synthetic simulation
-        Output: interest_income_aggregate_df  
+        Output: interest_income_aggregate_df
         Index waktu: 1..max_periods (Interest_1..Interest_m)
         """
         calculator = calc if calc else LoanCalculator()
-        
-        # Use max tenure if max_periods is 0 or None
+
+        # Determine booking periods (how long we keep booking new contracts)
         if not max_periods or max_periods <= 0:
-            max_periods = tenure
-        
+            booking_periods = tenure
+        else:
+            booking_periods = max_periods
+
+        # Total projection periods = last booking period + tenure - 1
+        # Because a contract booked at period N runs until period N + tenure - 1
+        projection_periods = booking_periods + tenure - 1
+
         agreements = []
-        for start_month in range(1, max_periods + 1):
+        for start_month in range(1, booking_periods + 1):
             booking_amount = initial_booking * ((1 + growth_rate_pct / 100) ** (start_month - 1))
             if ticket_size <= 0:
                 continue
@@ -106,7 +118,7 @@ class Synthetic:
 
             interest_row = {"GoLive_Period": period}
 
-            for abs_p in range(1, max_periods + 1):
+            for abs_p in range(1, projection_periods + 1):
                 paid = abs_p - period
                 if 0 <= paid < ten:
                     # Use iterative approach instead of closed form
