@@ -19,8 +19,7 @@ class Real:
 
             contract_end_periods = months_from_start + data[tenure_col]
 
-            max_periods = contract_end_periods.max()
-
+            max_periods = contract_end_periods.max() + 1
         start_date = data[golive_col].min()
         start_date = pd.to_datetime(start_date, format="%Y%m%d")
         
