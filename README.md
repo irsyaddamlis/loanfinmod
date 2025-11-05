@@ -9,7 +9,7 @@ pip uninstall -y finmod  # if already installed
 pip install git+https://github.com/bfi-finance/finmod.git
 ```
 
-Make sure the version is **1.0.1**.
+Make sure the version is **1.0.4**.
 
 ```python
 import finmod as fin
