@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "finmod"
-version = "1.0.4" 
+version = "1.0.5" 
 description = "Financial modeling and calculation toolkit for loan payment calculations, OSP projections, and interest income simulations"
 authors = [
     {name = "BFI Finance Analytic Center", email = "ariq.lubis@bfi.co.id"},
