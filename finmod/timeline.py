@@ -1,5 +1,6 @@
 from __future__ import annotations
 import pandas as pd
+import numpy as np
 from dateutil.relativedelta import relativedelta
 
 def month_between(a: pd.Timestamp, b: pd.Timestamp) -> int:
