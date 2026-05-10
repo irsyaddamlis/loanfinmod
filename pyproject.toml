@@ -7,7 +7,7 @@ name = "finmod"
 version = "1.0.5" 
 description = "Financial modeling and calculation toolkit for loan payment calculations, OSP projections, and interest income simulations"
 authors = [
-    {name = "BFI Finance Analytic Center", email = "ariq.lubis@bfi.co.id"},
+    {name = "Irsyad Damlis", email = "irsyad.damlis@gmail.com"},
 ]
 license = {text = "MIT"}
 readme = "README.md"
@@ -33,10 +33,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/bfi-finance/finmod"
-Repository = "https://github.com/bfi-finance/finmod.git"
-Issues = "https://github.com/bfi-finance/finmod/issues"
-Documentation = "https://github.com/bfi-finance/finmod#readme"
+Homepage = "https://github.com/irsyad.damlis/finmod"
+Repository = "https://github.com/irsyad.damlis/finmod.git"
+Issues = "https://github.com/irsyad.damlis/finmod/issues"
+Documentation = "https://github.com/irsyad.damlis/finmod#readme"
 
 [tool.setuptools.packages.find]
 where = ["."]
