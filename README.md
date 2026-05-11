@@ -1,18 +1,18 @@
-# Financial Model (`finmod`)
+# Loan Financial Model (`loanfinmod`)
 
 A Python library for financial calculations: loan payment schedules, outstanding principal (OSP) simulations, and interest income projections. Supports both **real contract data** and **synthetic initiation scenarios**.
 
 ## Installation
 
 ```bash
-pip uninstall -y finmod  # if already installed
-pip install git+https://github.com/bfi-finance/finmod.git
+pip uninstall -y loanfinmod  # if already installed
+pip install git+https://github.com/irsyad.damlis/loanfinmod.git
 ```
 
 Make sure the version is **1.0.4**.
 
 ```python
-import finmod as fin
+import loanfinmod as fin
 ```
 
 ---
