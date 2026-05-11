@@ -4,9 +4,13 @@ A Python library for financial calculations: loan payment schedules, outstanding
 
 ## Installation
 
+### For 1st install
 ```bash
 pip3 install git+https://github.com/irsyad.damlis/loanfinmod.git
-pip3 uninstall -y loanfinmod && pip3 install --no-cache-dir git+https://github.com/irsyaddamlis/loanfinmod.git # for update the library
+```
+### for update the library
+```bash
+pip3 uninstall -y loanfinmod && pip3 install --no-cache-dir git+https://github.com/irsyaddamlis/loanfinmod.git 
 ```
 
 Make sure the version is **1.0.4**.
