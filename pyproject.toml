@@ -33,11 +33,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/irsyad.damlis/finmod"
-Repository = "https://github.com/irsyad.damlis/finmod.git"
-Issues = "https://github.com/irsyad.damlis/finmod/issues"
-Documentation = "https://github.com/irsyad.damlis/finmod#readme"
+Homepage = "https://github.com/irsyad.damlis/loanfinmod"
+Repository = "https://github.com/irsyad.damlis/loanfinmod.git"
+Issues = "https://github.com/irsyad.damlis/loanfinmod/issues"
+Documentation = "https://github.com/irsyad.damlis/loanfinmod#readme"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["finmod*"]
+include = ["loanfinmod*"]
