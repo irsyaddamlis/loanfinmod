@@ -14,7 +14,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["finance", "loan", "payment", "calculation", "modeling", "osp", "interest"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 1 - Production/Stable",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
