@@ -1,5 +1,8 @@
 from .simulation import real, synthetic
 from .calculator import LoanCalculator
+from importlib.metadata import version
+
+__version__ = version("loanfinmod")
 
 # Expose main functions directly
 def calculate_pmt(df, ntf_col, rate_col, tenure_col):
