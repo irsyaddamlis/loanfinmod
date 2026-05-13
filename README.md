@@ -94,8 +94,8 @@ sample_data = pd.DataFrame({
 
 ```python
 # Add a new column to DataFrame
-fact_contract_sample['pmt'] = fin.calculate_pmt(
-    df=fact_contract_sample,
+sample_data['pmt'] = fin.calculate_pmt(
+    df=sample_data,
     ntf_col="Booking_NTF_Amount",
     rate_col="Effective_Rate",
     tenure_col="Tenor"
@@ -103,7 +103,7 @@ fact_contract_sample['pmt'] = fin.calculate_pmt(
 
 # Return values only
 pmt_values = fin.calculate_pmt(
-    df=fact_contract_sample,
+    df=sample_data,
     ntf_col="Booking_NTF_Amount",
     rate_col="Effective_Rate",
     tenure_col="Tenor"
