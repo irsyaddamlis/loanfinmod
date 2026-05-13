@@ -3,8 +3,8 @@ requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "finmod"
-version = "1.0.5" 
+name = "loanfinmod"
+version = "1.0.0" 
 description = "Financial modeling and calculation toolkit for loan payment calculations, OSP projections, and interest income simulations"
 authors = [
     {name = "Irsyad Damlis", email = "irsyad.damlis@gmail.com"},
