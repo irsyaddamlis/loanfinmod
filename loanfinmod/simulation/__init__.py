@@ -1,6 +1,11 @@
 from .synthetic import Synthetic
 from .real import Real
 
+__version__ = "0.1.0"
+__author__ = "Irsyad Damlis"
+__email__ = "irsyad.damlis@gmail.com"
+__license__ = "MIT"
+
 # Create module-like objects to support fin.real.calculate_osp() syntax
 class RealModule:
     @staticmethod
