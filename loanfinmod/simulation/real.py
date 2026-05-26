@@ -1,9 +1,8 @@
 from __future__ import annotations
 import pandas as pd
 from ..calculator import LoanCalculator
-from ..timeline import build_month_labels, index_to_label_map
+from ..timeline import build_month_labels
 from typing import Optional
-from IPython.display import display
 
 class Real:
     @staticmethod
