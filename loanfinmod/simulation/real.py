@@ -7,6 +7,22 @@ from typing import Optional
 class Real:
     @staticmethod
     def calculate_osp(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
+        """
+        Calculate Outstanding Principal (OSP) for real loan data.
+    
+        Args:
+            df: Input DataFrame containing loan data
+            agreement_col: Column name for agreement IDs
+            ntf_col: Column name for loan amount (NTF)
+            rate_col: Column name for annual interest rate
+            tenure_col: Column name for loan tenure (months)
+            golive_col: Column name for go-live date (format: YYYYMMDD)
+            max_periods: Maximum projection periods (auto-calculated if None)
+            calc: Optional LoanCalculator instance (creates new one if None)
+    
+        Returns:
+            DataFrame with OSP columns per period (OSP_YYYY-MM)
+        """
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
         if not max_periods:
@@ -104,6 +120,22 @@ class Real:
 
     @staticmethod
     def calculate_income(df, agreement_col, ntf_col, rate_col, tenure_col, golive_col, max_periods: Optional[int] = None, calc=None):
+        """
+        Calculate interest income for real loan data.
+
+        Args:
+            df: Input DataFrame containing loan data
+            agreement_col: Column name for agreement IDs
+            ntf_col: Column name for loan amount (NTF)
+            rate_col: Column name for annual interest rate
+            tenure_col: Column name for loan tenure (months)
+            golive_col: Column name for go-live date (format: YYYYMMDD)
+            max_periods: Maximum projection periods (auto-calculated if None)
+            calc: Optional LoanCalculator instance (creates new one if None)
+
+        Returns:
+            DataFrame with income columns per period (Income_YYYY-MM)
+        """
         calculator = calc if calc else LoanCalculator()
         data = df.copy()
 

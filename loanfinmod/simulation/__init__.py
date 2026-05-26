@@ -9,22 +9,12 @@ __license__ = "MIT"
 
 # Create module-like objects to support fin.real.calculate_osp() syntax
 class RealModule:
-    @staticmethod
-    def calculate_osp(*args, **kwargs):
-        return Real.calculate_osp(*args, **kwargs)
-    
-    @staticmethod  
-    def calculate_income(*args, **kwargs):
-        return Real.calculate_income(*args, **kwargs)
+    calculate_osp = Real.calculate_osp
+    calculate_income = Real.calculate_income
 
 class SyntheticModule:
-    @staticmethod
-    def calculate_osp(*args, **kwargs):
-        return Synthetic.calculate_osp(*args, **kwargs)
-    
-    @staticmethod
-    def calculate_income(*args, **kwargs):
-        return Synthetic.calculate_income(*args, **kwargs)
+    calculate_osp = Synthetic.calculate_osp
+    calculate_income = Synthetic.calculate_income
 
 # Create instances that can be imported
 real = RealModule()
