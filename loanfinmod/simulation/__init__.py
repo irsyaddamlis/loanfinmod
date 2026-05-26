@@ -1,7 +1,8 @@
 from .synthetic import Synthetic
 from .real import Real
+from importlib.metadata import version
 
-__version__ = "0.1.0"
+__version__ = version("loanfinmod")
 __author__ = "Irsyad Damlis"
 __email__ = "irsyad.damlis@gmail.com"
 __license__ = "MIT"
