@@ -1,11 +1,11 @@
 from .synthetic import Synthetic
 from .real import Real
-from importlib.metadata import version
+from importlib.metadata import version, author, email, license
 
 __version__ = version("loanfinmod")
-__author__ = "Irsyad Damlis"
-__email__ = "irsyad.damlis@gmail.com"
-__license__ = "MIT"
+__author__ = author("loanfinmod")
+__email__ = email("loanfinmod")
+__license__ = license("loanfinmod")
 
 # Create module-like objects to support fin.real.calculate_osp() syntax
 class RealModule:

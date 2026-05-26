@@ -1,11 +1,11 @@
 from .simulation import real, synthetic
 from .calculator import LoanCalculator
-from importlib.metadata import version
+from importlib.metadata import version, author, email, license
 
 __version__ = version("loanfinmod")
-__author__ = "Irsyad Damlis"
-__email__ = "irsyad.damlis@gmail.com"
-__license__ = "MIT"
+__author__ = author("loanfinmod")
+__email__ = email("loanfinmod")
+__license__ = license("loanfinmod")
 
 # Expose main functions directly
 def calculate_pmt(df, ntf_col, rate_col, tenure_col):
