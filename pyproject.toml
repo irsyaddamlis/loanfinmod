@@ -6,8 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "loanfinmod"
 version = "1.0.0" 
 description = "Financial modeling and calculation toolkit for loan payment calculations, OSP projections, and interest income simulations"
-authors = {text = "Irsyad Damlis"}
-email = {text = "irsyad.damlis@gmail.com"}
+authors = [
+    {name = "Irsyad Damlis", email = "irsyad.damlis@gmail.com"}
+]
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.8"
@@ -33,10 +34,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/irsyad.damlis/loanfinmod"
-Repository = "https://github.com/irsyad.damlis/loanfinmod.git"
-Issues = "https://github.com/irsyad.damlis/loanfinmod/issues"
-Documentation = "https://github.com/irsyad.damlis/loanfinmod#readme"
+Homepage = "https://github.com/irsyaddamlis/loanfinmod"
+Repository = "https://github.com/irsyaddamlis/loanfinmod.git"
+Issues = "https://github.com/irsyaddamlis/loanfinmod/issues"
+Documentation = "https://github.com/irsyaddamlis/loanfinmod#readme"
 
 [tool.setuptools.packages.find]
 where = ["."]
