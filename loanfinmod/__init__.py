@@ -1,6 +1,7 @@
-from .simulation import real, synthetic
-from .calculator import LoanCalculator
 from importlib.metadata import version
+
+from .calculator import LoanCalculator
+from .simulation import real, synthetic
 
 __version__ = version("loanfinmod")
 __author__ = "Irsyad Damlis"
@@ -25,6 +26,6 @@ initiation = synthetic
 __all__ = [
     "calculate_pmt", 
     "calculate_installment", 
-    "real", 
+    "real",
     "initiation"
 ]
