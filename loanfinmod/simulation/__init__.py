@@ -20,5 +20,9 @@ class SyntheticModule:
 # Create instances that can be imported
 real = RealModule()
 synthetic = SyntheticModule()
+initiation = synthetic
 
-__all__ = ["Synthetic", "Real", "real", "synthetic"]
+__all__ = ["Synthetic",
+           "Real",
+           "real",
+           "initiation"]

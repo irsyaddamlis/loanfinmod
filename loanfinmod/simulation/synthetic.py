@@ -1,7 +1,11 @@
 from __future__ import annotations
-import pandas as pd
-from ..calculator import LoanCalculator
+
 from typing import Optional
+
+import pandas as pd
+
+from calculator import LoanCalculator
+
 
 class Synthetic:
     @staticmethod
