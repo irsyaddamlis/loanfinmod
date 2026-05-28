@@ -1,6 +1,7 @@
-from .synthetic import Synthetic
-from .real import Real
 from importlib.metadata import version
+
+from .real import Real
+from .synthetic import Synthetic
 
 __version__ = version("loanfinmod")
 __author__ = "Irsyad Damlis"
@@ -9,12 +10,12 @@ __license__ = "MIT"
 
 # Create module-like objects to support fin.real.calculate_osp() syntax
 class RealModule:
-    calculate_osp = Real.calculate_osp
-    calculate_income = Real.calculate_income
+    calculate_osp = staticmethod(Real.calculate_osp)
+    calculate_income = staticmethod(Real.calculate_income)
 
 class SyntheticModule:
-    calculate_osp = Synthetic.calculate_osp
-    calculate_income = Synthetic.calculate_income
+    calculate_osp = staticmethod(Synthetic.calculate_osp)
+    calculate_income = staticmethod(Synthetic.calculate_income)
 
 # Create instances that can be imported
 real = RealModule()
