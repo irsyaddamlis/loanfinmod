@@ -212,3 +212,5 @@ __marimo__/
 # OS
 .DS_Store           # Mac
 Thumbs.db           # Windows
+
+*.egg-info/
