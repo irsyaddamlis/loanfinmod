@@ -1,5 +1,7 @@
 from importlib.metadata import version
 
+from loanfinmod.simulation.simulation__init__ import initiation
+
 from .calculator import (calculate_installment, calculate_pmt, installment,
                          interest_income, osp, pmt, principal_payment)
 from .simulation import initiation, real

@@ -1,5 +1,5 @@
-from .core_calculator import LoanCalculator
-from .dataframe import DataFrameCalculator
+from .loan_calculator import LoanCalculator
+from .loan_dataframe import DataFrameCalculator
 
 # make an alias for easier import
 pmt = LoanCalculator.pmt

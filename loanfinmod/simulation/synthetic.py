@@ -4,7 +4,7 @@ from typing import Optional
 
 import pandas as pd
 
-from calculator import LoanCalculator
+from ..calculator import LoanCalculator
 
 
 class Synthetic:

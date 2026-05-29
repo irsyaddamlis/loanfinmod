@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from .core_calculator import LoanCalculator
+from .loan_calculator import LoanCalculator
 
 
 class DataFrameCalculator:
