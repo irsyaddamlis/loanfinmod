@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: update-readme-version
         name: Update README Version
-        entry: python scripts/update_version.py
+        entry: python scripts/update_readme_version.py
         language: python
         pass_filenames: false
         always_run: true
