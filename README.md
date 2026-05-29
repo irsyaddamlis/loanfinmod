@@ -14,7 +14,7 @@ pip install git+https://github.com/irsyaddamlis/loanfinmod.git
 pip uninstall -y loanfinmod && pip install --no-cache-dir git+https://github.com/irsyaddamlis/loanfinmod.git
 ```
 
-Make sure the version is **1.0.1**.
+Make sure the version is **1.0.2**.
 
 ```python
 import loanfinmod as fin

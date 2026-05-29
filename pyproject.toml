@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "loanfinmod"
-version = "1.0.0" 
+version = "1.0.2" 
 description = "Financial modeling and calculation toolkit for loan payment calculations, OSP projections, and interest income simulations"
 authors = [
     {name = "Irsyad Damlis", email = "irsyad.damlis@gmail.com"}
