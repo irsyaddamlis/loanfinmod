@@ -2,14 +2,14 @@ from .loan_calculator import LoanCalculator
 from .loan_dataframe import DataFrameCalculator
 
 # make an alias for easier import
-pmt = LoanCalculator.pmt
-installment = LoanCalculator.installment_amount
-principal_payment = LoanCalculator._principal_payment
-osp = LoanCalculator._osp_current
-interest_income = LoanCalculator._interest_income
+pmt = staticmethod(LoanCalculator.pmt)
+installment = staticmethod(LoanCalculator.installment_amount)
+principal_payment = staticmethod(LoanCalculator._principal_payment)
+osp = staticmethod(LoanCalculator._osp_current)
+interest_income = staticmethod(LoanCalculator._interest_income)
 
-calculate_pmt = DataFrameCalculator.calculate_pmt
-calculate_installment = DataFrameCalculator.calculate_installment
+calculate_pmt = staticmethod(DataFrameCalculator.calculate_pmt)
+calculate_installment = staticmethod(DataFrameCalculator.calculate_installment)
 
 __all__ = ["LoanCalculator",
            "DataFrameCalculator",
