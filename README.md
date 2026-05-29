@@ -4,19 +4,36 @@ A Python library for financial calculations: loan payment schedules, outstanding
 
 ## Installation
 
-### For 1st install
+### First install
 ```bash
-pip install git+https://github.com/irsyad.damlis/loanfinmod.git
-```
-### for update the library
-```bash
-pip uninstall -y loanfinmod && pip install --no-cache-dir git+https://github.com/irsyaddamlis/loanfinmod.git 
+pip install git+https://github.com/irsyaddamlis/loanfinmod.git
 ```
 
-Make sure the version is **1.0.4**.
+### Update the library
+```bash
+pip uninstall -y loanfinmod && pip install --no-cache-dir git+https://github.com/irsyaddamlis/loanfinmod.git
+```
+
+Make sure the version is **1.0.1**.
 
 ```python
 import loanfinmod as fin
+```
+
+---
+
+## Package Structure
+
+```
+loanfinmod/
+├── calculator/
+│   ├── loan_calculator.py    # Scalar math engine (LoanCalculator)
+│   └── loan_dataframe.py     # DataFrame wrappers (DataFrameCalculator)
+├── simulation/
+│   ├── real.py               # Real contract data simulation
+│   └── synthetic.py          # Synthetic initiation simulation
+└── time_setup/
+    └── period.py             # Time period utilities
 ```
 
 ---
@@ -64,7 +81,7 @@ Your DataFrame should contain the following columns:
 | Tenure Column | integer | Loan tenure in months | 6, 12, 18, 24 |
 | GoLive Date Column | string/numeric | Contract start date (YYYYMMDD format) | 20250102, 20250115 |
 
-### Sample Data Example:
+### Sample Data Example
 
 ```python
 import pandas as pd
@@ -79,7 +96,7 @@ sample_data = pd.DataFrame({
 ```
 
 **Important Notes:**
-- Column names can be customized - match them with function parameters
+- Column names can be customized — match them with function parameters
 - GoLive date must be in YYYYMMDD format
 - Effective rate should be in percentage (36.0 = 36% per year)
 - All numeric values must be valid (no null values for required columns)
@@ -88,7 +105,30 @@ sample_data = pd.DataFrame({
 
 ## Public Functions
 
-### 1. Payment Calculations
+### 1. Scalar Calculator Functions
+
+These operate on individual scalar values and can be used directly without a DataFrame.
+
+```python
+# Calculate PMT (periodic payment)
+pmt_value = fin.pmt(ntf=10000000, annual_rate_pct=36.0, tenure=12)
+
+# Calculate rounded installment amount
+installment_value = fin.installment(ntf=10000000, annual_rate_pct=36.0, tenure=12)
+
+# Calculate principal payment for a period
+principal = fin.principal_payment(pmt=pmt_value, osp_last_month=9000000, annual_rate_pct=36.0)
+
+# Calculate current outstanding principal
+current_osp = fin.osp(osp_last_month=9000000, principal_payment=principal)
+
+# Calculate interest income for a period
+interest = fin.interest_income(installment=installment_value, principal_payment=principal)
+```
+
+---
+
+### 2. DataFrame Payment Functions
 
 #### a. Calculate PMT
 
@@ -114,8 +154,8 @@ pmt_values = fin.calculate_pmt(
 
 ```python
 # Add a new column to DataFrame
-fact_contract_sample['installment'] = fin.calculate_installment(
-    df=fact_contract_sample,
+sample_data['installment'] = fin.calculate_installment(
+    df=sample_data,
     ntf_col="Booking_NTF_Amount",
     rate_col="Effective_Rate",
     tenure_col="Tenor"
@@ -123,7 +163,7 @@ fact_contract_sample['installment'] = fin.calculate_installment(
 
 # Return values only
 installment_values = fin.calculate_installment(
-    df=fact_contract_sample,
+    df=sample_data,
     ntf_col="Booking_NTF_Amount",
     rate_col="Effective_Rate",
     tenure_col="Tenor"
@@ -132,13 +172,13 @@ installment_values = fin.calculate_installment(
 
 ---
 
-### 2. Simulation – Real Data
+### 3. Simulation – Real Data
 
 #### a. Calculate Outstanding Principal (OSP)
 
 ```python
 osp = fin.real.calculate_osp(
-    df=fact_contract_sample,
+    df=sample_data,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
     tenure_col="Tenor",
@@ -152,7 +192,7 @@ osp = fin.real.calculate_osp(
 
 ```python
 income = fin.real.calculate_income(
-    df=fact_contract_sample,
+    df=sample_data,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
     tenure_col="Tenor",
@@ -164,7 +204,9 @@ income = fin.real.calculate_income(
 
 ---
 
-### 3. Simulation – Initiation
+### 4. Simulation – Initiation (Synthetic)
+
+`fin.initiation` and `fin.synthetic` are aliases for the same synthetic simulation module.
 
 #### a. Calculate OSP
 
@@ -189,5 +231,27 @@ init_income = fin.initiation.calculate_income(
     annual_rate_pct=24,
     tenure=18,
     # max_periods=12  # Optional: if not provided, uses tenure
+)
+```
+
+---
+
+### 5. Advanced Usage – Direct Class Access
+
+For advanced use cases, you can access the underlying classes directly:
+
+```python
+from loanfinmod import LoanCalculator, DataFrameCalculator
+
+# Use LoanCalculator directly
+calc = LoanCalculator()
+pmt = calc.pmt(ntf=10000000, annual_rate_pct=36.0, tenure=12)
+
+# Use DataFrameCalculator directly
+pmt_series = DataFrameCalculator.calculate_pmt(
+    df=sample_data,
+    ntf_col="Booking_NTF_Amount",
+    rate_col="Effective_Rate",
+    tenure_col="Tenor"
 )
 ```

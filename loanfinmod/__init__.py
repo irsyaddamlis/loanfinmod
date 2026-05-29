@@ -17,10 +17,9 @@ calculate_income = real.calculate_income
 
 __all__ = [
     "pmt",
-    "calculateinstallment",
+    "installment",
     "principal_payment",
     "osp",
-    "installment",
     "interest_income",
     "calculate_pmt",
     "calculate_installment",
