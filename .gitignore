@@ -213,4 +213,8 @@ __marimo__/
 .DS_Store           # Mac
 Thumbs.db           # Windows
 
-*.egg-info/
+*.egg-info/*.egg-info/
+__pycache__/
+.DS_Store
+.venv/
+.pytest_cache/
