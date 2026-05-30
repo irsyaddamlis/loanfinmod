@@ -177,7 +177,7 @@ installment_values = fin.calculate_installment(
 #### a. Calculate Outstanding Principal (OSP)
 
 ```python
-osp = fin.real.calculate_osp(
+osp = fin.calculate_osp(
     df=sample_data,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
@@ -191,7 +191,7 @@ osp = fin.real.calculate_osp(
 #### b. Calculate Interest Income
 
 ```python
-income = fin.real.calculate_income(
+income = fin.calculate_income(
     df=sample_data,
     agreement_col="AgreementNo",
     ntf_col="Booking_NTF_Amount",
