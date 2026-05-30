@@ -174,6 +174,8 @@ installment_values = fin.calculate_installment(
 
 ### 3. Simulation – Real Data
 
+This is used if we want to simulate the outstanding principal and interest income from the date of a new loan booking through the entire tenure of all contracts
+
 #### a. Calculate Outstanding Principal (OSP)
 
 ```python
@@ -204,9 +206,9 @@ income = fin.calculate_income(
 
 ---
 
-### 4. Simulation – Initiation (Synthetic)
+### 4. Simulation – Initiation
 
-`fin.initiation` and `fin.synthetic` are aliases for the same synthetic simulation module.
+`fin.initiation` is used to predict future loan bookings by referencing the projected growth rate which requires the initial loan booking as a baseline
 
 #### a. Calculate OSP
 
@@ -236,22 +238,4 @@ init_income = fin.initiation.calculate_income(
 
 ---
 
-### 5. Advanced Usage – Direct Class Access
 
-For advanced use cases, you can access the underlying classes directly:
-
-```python
-from loanfinmod import LoanCalculator, DataFrameCalculator
-
-# Use LoanCalculator directly
-calc = LoanCalculator()
-pmt = calc.pmt(ntf=10000000, annual_rate_pct=36.0, tenure=12)
-
-# Use DataFrameCalculator directly
-pmt_series = DataFrameCalculator.calculate_pmt(
-    df=sample_data,
-    ntf_col="Booking_NTF_Amount",
-    rate_col="Effective_Rate",
-    tenure_col="Tenor"
-)
-```
